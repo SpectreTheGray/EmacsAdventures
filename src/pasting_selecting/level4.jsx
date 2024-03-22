@@ -4,6 +4,7 @@ import 'ace-builds/src-noconflict/mode-text';
 import 'ace-builds/src-noconflict/theme-twilight';
 
 function Level4() {
+  const [cursorPosition, setCursorPosition] = useState({ row: 0, column: 0 });
   const initialContent = `
   💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧 💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧
   💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧 💧💧💧💧💧💧PLACE THE EGGS BELOW!!!!!!💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧💧
@@ -113,24 +114,6 @@ function Level4() {
   `; // Initial content
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const [content, setContent] = useState(initialContent);
   const [lastReplacedIndex, setLastReplacedIndex] = useState(-1);
 
@@ -140,26 +123,22 @@ function Level4() {
         const lines = prevContent.split('\n');
         let eggBetweenLine1And20 = false;
   
-        // Check for eggs in the first 50 lines
         for (let i = 0; i < 50 && i < lines.length; i++) {
           const line = lines[i];
           if (line.includes('🥚')) {
             console.log("Egg found on line " + (i + 1) + ": " + line);
-  
-            // Check if the egg is between line 1 and 20
+
             if (i < 20) {
               eggBetweenLine1And20 = true;
             }
           }
         }
-  
-        // Redirect if egg found between line 1 and 20
+
         if (eggBetweenLine1And20) {
           console.log("Egg found between line 1 and 20!");
-          window.location.href = '/end';
+          window.location.href = '/chalange1';
         }
   
-        // Replace the next egg with fire emoji
         const index = prevContent.indexOf('🥚', lastReplacedIndex + 1);
         if (index !== -1) {
           console.log("Replacing egg with fire...");
@@ -169,55 +148,25 @@ function Level4() {
         } else {
           console.log("No more eggs found.");
         }
-        return prevContent; // Ensure to return prevContent in all cases
+        return prevContent; 
       });
-    }, 2000); // Checking every 3 seconds
+    }, 2000); 
   
-    return () => clearInterval(interval); // Cleanup function to clear the interval when component unmounts
+    return () => clearInterval(interval); 
   }, [lastReplacedIndex, setContent]);
   
-  
-  
-  
-  
-  
-  
-  
 
-
+  
+    const handleCursorPositionChange = (selection) => {
+    const position = selection.getCursor();
+    setCursorPosition(position);
+  };
+  
   
   const handleChange = newContent => {
     setContent(newContent);
   };
   
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
@@ -237,8 +186,11 @@ function Level4() {
         keyboardHandler="emacs"
         value={content}
         onChange={handleChange}
-        readOnly={false}
+        onCursorChange={handleCursorPositionChange}
       />
+       <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 999, backgroundColor: '#000000', color: 'white', borderTop: '1px solid #ccc', padding: '5px' }}>
+        <span>Row: {cursorPosition.row + 1}, Column: {cursorPosition.column + 1}, Levels: 6/6 completed</span>
+      </div>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import 'ace-builds/src-noconflict/mode-text';
 import 'ace-builds/src-noconflict/theme-twilight';
 
 function Level3() {
+  const [cursorPosition, setCursorPosition] = useState({ row: 0, column: 0 });
   const [content, setContent] = useState(`
     🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱
     🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱paste the cows here.🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱🧱
@@ -98,6 +99,13 @@ function Level3() {
     }
   }, [content]);
 
+
+  const handleCursorPositionChange = (selection) => {
+    const position = selection.getCursor();
+    setCursorPosition(position);
+  };
+
+
   return (
     <div style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
       <AceEditor
@@ -115,7 +123,11 @@ function Level3() {
         keyboardHandler="emacs"
         value={content}
         onChange={setContent}
+        onCursorChange={handleCursorPositionChange}
       />
+      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 999, backgroundColor: '#000000', color: 'white', borderTop: '1px solid #ccc', padding: '5px' }}>
+        <span>Row: {cursorPosition.row + 1}, Column: {cursorPosition.column + 1}, Levels: 5/6 completed</span>
+      </div>
     </div>
   );
 }

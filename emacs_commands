@@ -1,0 +1,43 @@
+C-v: Move forward one screenful.
+M-v: Move backward one screenful.
+C-l: Clear screen and redisplay all text, moving the text around the cursor to the center of the screen.
+C-p: Move to previous line.
+C-b: Move backward a character.
+C-f: Move forward a character.
+M-f: Move forward a word.
+M-b: Move backward a word.
+C-n: Move to next line.
+C-a: Move to beginning of line.
+C-e: Move to end of line.
+M-a: Move back to beginning of sentence.
+M-e: Move forward to end of sentence.
+M-<: Move to the beginning of the whole text.
+M->: Move to the end of the whole text.
+PageUp and PageDown keys (if available) for moving by screenfuls.
+Numeric Argument:
+
+C-u: Prefix for providing a numeric argument to commands.
+Scrolling:
+
+C-u [number] C-v: Scroll up by the specified number of lines.
+Interrupts and Disabling Commands:
+
+C-g: Stop Emacs from executing a command or interrupt a command.
+Disabling Commands: Some commands are disabled to prevent accidental use.
+Window Management:
+
+C-x 1: One window (kill all other windows).
+Inserting and Deleting:
+
+Typing characters inserts them.
+<DEL>: Delete the character just before the cursor.
+C-d: Delete the character after the cursor.
+M-<DEL>: Kill the word before the cursor.
+M-d: Kill the word after the cursor.
+C-k: Kill from cursor position to end of line.
+M-k: Kill to end of current sentence.
+C-<SPC>: Set mark for selecting text.
+C-w: Kill selected text.
+C-y: Yank (reinsert) the last killed text.
+M-y: Replace yanked text with previous kill (repeat to cycle through previous kills).
+Undo: C-/ or C-_ or C-x u to undo changes.

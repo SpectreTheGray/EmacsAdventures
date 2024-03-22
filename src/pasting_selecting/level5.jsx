@@ -48,7 +48,7 @@ function Level5() {
 
 
 
-  `; // Initial content
+  `; 
   const [content, setContent] = useState(initialContent);
   const [lastReplacedIndex, setLastReplacedIndex] = useState(-1);
 
@@ -68,14 +68,12 @@ function Level5() {
             const newContent = prevContent.substring(0, index) + '🔥' + prevContent.substring(index + 1);
             setLastReplacedIndex(index);
             if (prevContent.indexOf('🥚', index + 1) === -1) {
-              // If no more eggs are found, redirect to '/end'
               window.location.href = '/end';
             }
             return newContent;
           }
         }
         if (allEggsInLines1To11) {
-          // If all eggs are in lines 1 to 11, redirect to '/end'
           window.location.href = '/end';
         }
         clearInterval(interval);
@@ -105,8 +103,7 @@ function Level5() {
         }}
         keyboardHandler="emacs"
         value={content}
-        onChange={handleChange} // Added missing onChange prop
-        readOnly={false}
+        onChange={handleChange} 
       />
     </div>
   );

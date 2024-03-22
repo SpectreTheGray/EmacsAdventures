@@ -1,6 +1,6 @@
 {
-  "name": "emacs_game",
-  "version": "1.0.0",
+  "name": "norway_games",
+  "version": "0.0.2",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,10 +11,12 @@
   "dependencies": {
     "@tauri-apps/api": "^1.5.3",
     "emoji-regex": "^10.3.0",
+    "norway_games": "^0.0.2",
     "react": "^18.2.0",
     "react-ace": "^10.1.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.22.3",
+    "sharp": "^0.33.2",
     "styled-components": "^6.1.8"
   },
   "devDependencies": {

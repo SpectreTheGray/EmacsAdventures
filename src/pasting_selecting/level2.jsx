@@ -12,26 +12,44 @@ function Level2() {
     fetchEditorContent();
   }, []);
 
+
+
+
+
+
+
+
+
+
+
   const handleEditorChange = (newContent) => {
     const diff = getChangeDiff(content, newContent);
     console.log('Editor content changed:', diff);
 
-    // Check if the flag emoji was added anywhere in the new content
     if (newContent.includes('🚩')) {
-      // Update flag position when the flag is added
       const flagIndex = newContent.indexOf('🚩');
       const linesBeforeFlag = newContent.substr(0, flagIndex).split('\n').length;
       const flagColumn = flagIndex - newContent.lastIndexOf('\n', flagIndex) - 1;
       const position = { row: linesBeforeFlag, column: flagColumn };
-      console.log('Flag position:', position);
-      if (position.row === 56) {
-        console.log('Flag is on line 56.');
-        window.location.href = '/level3'; // Redirect to Level3 if the flag is on line 56
+      if (position.row > 45) {
+        window.location.href = '/level3';
       }
     }
 
     setContent(newContent);
   };
+
+
+
+
+
+
+
+
+
+
+
+  
 
   const handleCursorPositionChange = (selection) => {
     const position = selection.getCursor();
@@ -55,15 +73,7 @@ function Level2() {
         const gamecontent = `
 
 
-        _   __                                         _     _                _   __  
-        \\ \\ / /                                        |  |  | |              | | /  | 
-         \\ V /___  _   _   _ __   __ _ ___ ___  ___  __|   | | | _____   _____| | \`| | 
-          \\ // _ \\| | | | | '_ \\ / _\` / __/ __|/ _ \\/   _\` | | |/ _ \\ \\ / / _ \\ |  | | 
-          | | (_) | |_| | | |_) | (_| \\__ \\__ \\  __/ (_  | | | |  __/\\ V /  __/ | _| |_
-          \\_/\\___/ \\__,_| | .__/ \\__,_|___/___/\\___|\  \ __,_| |_|\\___| \\_/ \\___|_| \\___/
-                          | |                                                        
-                          |_|                                              
-
+a
         Ctrl-P: Move to the previous line
         Ctrl-N: Move to the next line
         Ctrl-B: Move to the previous character
@@ -111,7 +121,6 @@ function Level2() {
                                                     past it above      
         `;
 
-        // Insert flag in the middle of the middle line
         const lines = gamecontent.split('\n');
         const middleIndex = Math.floor(lines.length / 2);
         const middleLineLength = lines[middleIndex].length;
@@ -165,6 +174,9 @@ function Level2() {
         onChange={handleEditorChange}
         onCursorChange={handleCursorPositionChange}
       />
+        <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 999, backgroundColor: '#000000', color: 'white', borderTop: '1px solid #ccc', padding: '5px' }}>
+        <span>Row: {cursorPosition.row + 1}, Column: {cursorPosition.column + 1}, Levels: 4/6 completed</span>
+      </div>
     </div>
   );
 }

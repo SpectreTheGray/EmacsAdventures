@@ -1,11 +1,16 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Level1 from "./level1"; // Ensure the correct import path
 import WelcomePage from "./firstpage";
-import Level2 from "./level2";
-import Level3 from "./level3";
-import Level4 from "./level4";
-import Level5 from "./level5";
+import Movement1 from "./movement/movement_1"; 
+import Movement2 from "./movement/movement_2";
+import Movement3 from "./movement/movement_3";
+import Deleting1 from "./deleting/deleting1";
+import Chalange1 from "./chalange/chalange1";
+import Level2 from "./pasting_selecting/level2";
+import Level3 from "./pasting_selecting/level3";
+import Level4 from "./pasting_selecting/level4";
+import Level5 from "./pasting_selecting/level5";
+import TestSuits from "./test_suites";
 import End from "./end";
 
 const App = () => {
@@ -13,7 +18,12 @@ const App = () => {
     <BrowserRouter>
       <Routes>
       <Route exact path="/" element={<WelcomePage />} />
-        <Route exact path="/level1" element={<Level1 />} />
+        <Route exact path="/welcome" element={<WelcomePage />} />
+        <Route exact path="/level1" element={<Movement1 />} />
+        <Route exact path="/movement2" element={<Movement2 />} />
+        <Route exact path="/movement3" element={<Movement3 />} />
+        <Route exact path="/deleting1" element={<Deleting1 />} />
+        <Route exact path="/chalange1" element={<Chalange1 />} />
         <Route exact path="/level2" element={<Level2 />} />
         <Route exact path="/level3" element={<Level3 />} />
         <Route exact path="/level4" element={<Level4 />} />
