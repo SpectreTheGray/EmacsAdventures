@@ -214,7 +214,7 @@ So she set to work, and very soon finished off the cake.
 useEffect(() => {
   const generateContent = () => {
     const lines = INSTRUCTIONS.split('\n');
-    const startIndex = 60; 
+    const startIndex = 100; 
     const endIndex = 250; 
     const validLines = lines.slice(startIndex, endIndex + 1); 
 
@@ -236,7 +236,7 @@ useEffect(() => {
     if (!newContent.includes(FLAG)) {
       setDeletedFlagCounter(prevCounter => prevCounter + 1);
       if (deletedFlagCounter >= TOTAL_FLAGS) {
-        window.location.href = '/level2';
+        window.location.href = '/chalange2';
       }
     }
     setContent(newContent);

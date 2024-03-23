@@ -1,105 +1,132 @@
-import React, { useEffect, useState, useRef } from "react";
-import AceEditor from "react-ace";
-import "ace-builds/src-noconflict/mode-text";
-import "ace-builds/src-noconflict/keybinding-emacs";
-import "ace-builds/src-noconflict/theme-twilight";
+import React, { useEffect, useState, useRef } from 'react';
+import AceEditor from 'react-ace';
+import 'ace-builds/src-noconflict/mode-text';
+import 'ace-builds/src-noconflict/keybinding-emacs';
+import 'ace-builds/src-noconflict/theme-twilight';
 
-const Challenge1 = () => {
-  const [content, setContent] = useState("");
-  const [movesCount, setMovesCount] = useState(50);
+const Chalange3 = () => {
+  const [content, setContent] = useState('');
+  const [deletedFlagCounter, setDeletedFlagCounter] = useState(0);
+  const [movesCount, setMovesCount] = useState(0);
+
   const [cursorPosition, setCursorPosition] = useState({ row: 0, column: 0 });
   const editorRef = useRef(null);
+  const TOTAL_FLAGS = 10;
   const MAX_MOVES = 50;
-  const FLAG = "🐞";
 
   const INSTRUCTIONS = `
-  ░▒▓██████▓▒░░░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓█▓▒░       ░▒▓██████▓▒░░▒▓███████▓▒░ ░▒▓██████▓▒░░▒▓████████▓▒░               ░▒▓█▓▒░ 
-  ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                   ░▒▓████▓▒░ 
-  ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░                      ░▒▓█▓▒░ 
-  ░▒▓█▓▒░      ░▒▓████████▓▒░▒▓████████▓▒░▒▓█▓▒░      ░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒▒▓███▓▒░▒▓██████▓▒░                 ░▒▓█▓▒░ 
-  ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                      ░▒▓█▓▒░ 
-  ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                      ░▒▓█▓▒░ 
-  ░▒▓██████▓▒░░▒░▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓████████▓▒░               ░▒▓█▓▒░ 
-                                                                                                                                  
-                        
+ ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓█▓▒░       ░▒▓██████▓▒░░▒▓███████▓▒░ ░▒▓██████▓▒░░▒▓████████▓▒░            ░▒▓███████▓▒░  
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                          ░▒▓█▓▒░ 
+░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░                          ░▒▓█▓▒░ 
+░▒▓█▓▒░      ░▒▓████████▓▒░▒▓████████▓▒░▒▓█▓▒░      ░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒▒▓███▓▒░▒▓██████▓▒░              ░▒▓███████▓▒░  
+░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                          ░▒▓█▓▒░ 
+░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░                          ░▒▓█▓▒░ 
+ ░▒▓██████▓▒░░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓████████▓▒░            ░▒▓███████▓▒░  
+                                                                                                                                    
+                                                                                    
+                          
 
-Use Emacs move commands to navigate through the text:
+  Use Emacs move commands to navigate through the text:
 
 =========================movement=======================================
-- Ctrl-P: Move to the previous line
+  - Ctrl-P: Move to the previous line
 
-- Ctrl-N: Move to the next line
+  - Ctrl-N: Move to the next line
 
-- Ctrl-B: Move backward a character
+  - Ctrl-B: Move backward a character
 
-- Ctrl-F: Move forward a character
+  - Ctrl-F: Move forward a character
 
-- Ctrl-A: Move to the beginning of the line
+  - Ctrl-A: Move to the beginning of the line
 
-- Ctrl-E: Move to the end of the line
+  - Ctrl-E: Move to the end of the line
 
-- Ctrl-V: Move one page down (scroll forward by one screenful)
+  - Ctrl-V: Move one page down (scroll forward by one screenful)
 
-- Alt-V: Move one page up (scroll backward by one screenful)
+  - Alt-V: Move one page up (scroll backward by one screenful)
 
-- Ctrl-D: Move one half page down (scroll forward by half a screen)
+  - Ctrl-D: Move one half page down (scroll forward by half a screen)
 
-- Alt-D: Move one half page up (scroll backward by half a screen)
+  - Alt-D: Move one half page up (scroll backward by half a screen)
+
+  
+  - Ctrl-U: Prefix for providing a numeric argument to commands. You can use this to repeat a command a specified number of times or provide numerical input for certain commands.
+
+  - Ctrl-U [number] Ctrl-V: Scroll up by the specified number of lines.
+
+  - Ctrl-V (PageDown) and Alt-V (PageUp) keys (if available) for moving by screenfuls.
+
+  
+  - Meta-a: Move back to beginning of sentence. This command moves the cursor to the beginning of the current sentence.
+
+  - Meta-e: Move forward to end of sentence. This command moves the cursor to the end of the current sentence.
+
+  - Meta-<: Move to the beginning of the whole text. This command moves the cursor to the beginning of the document or text.
+
+  - Meta->: Move to the end of the whole text. This command moves the cursor to the end of the document or text.
+===============================Movement=================================
+  
+
+================================Inserting and Deleting:================================
+
+ - Typing characters inserts them.
+
+ - <DEL>: Delete the character just before the cursor.
+
+ - C-d: Delete the character after the cursor.
+
+ - Meta-<DEL>: Kill the word before the cursor.
+
+ - Meta-d: Kill the word after the cursor.
+
+ - C-k: Kill from cursor position to end of line.
+
+ - Meta-k: Kill to end of current sentence.
 
 
-- Ctrl-U: Prefix for providing a numeric argument to commands. You can use this to repeat a command a specified number of times or provide numerical input for certain commands.
+ -  Undo: C-/ or C-_ or C-x u to undo changes.
 
-- Ctrl-U [number] Ctrl-V: Scroll up by the specified number of lines.
+================================Inserting and Deleting:=================================
 
-- Ctrl-V (PageDown) and Alt-V (PageUp) keys (if available) for moving by screenfuls.
-
-
-- Meta-a: Move back to beginning of sentence. This command moves the cursor to the beginning of the current sentence.
-
-- Meta-e: Move forward to end of sentence. This command moves the cursor to the end of the current sentence.
-
-- Meta-<: Move to the beginning of the whole text. This command moves the cursor to the beginning of the document or text.
-
-- Meta->: Move to the end of the whole text. This command moves the cursor to the end of the document or text.
 
 
 ========================================================Task=================================================================
-- Delete the bug using Emacs commands and delete it using Emacs commands, you have to delete it 3 times.
-=============================================================================================================================
+- Delete the bug using Emacs commands and delete it using Emacs commands you have to delete it 3 times.
+========================================================Task=================================================================
 
 
 
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> Practice and try different Emacs combinations to kill the bug  <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-                                                        ....
-                                                      .'' .'''
-                  .                                 .'   :
-                 \\\\                              .:    :
-                  \\\\                            _:    :       ..----.._
-                   \\\\                        .:::.....:::.. .'         '''.
-                    \\\\                     .'  #-. .-######'     #        '''.
-                     \\\\                     '.##'/ ' ################       :
-                      \\\\                      #####################         :
-                       \\\\                   ..##.-.#### .''''###'.._        :
-                        \\\\                 :--:########:            ''''.    .' :
-                         \\\\..__...--.. :--:#######.'   '''.         '''.     :
-                          :     :  : : ''':''-:''''::        .         '''  .'
-                          '''-'''..: :    '''    '''''''.      ''.        :
-                            \\\\  :: : :     '''      '''''''.     ''.      .:
-                             \\\\ ::  : :           '''' ..:       '''     '''.
-                              \\\\::   : :           ....'' ..:       '''     '''.
-                               \\\\::  : :    .....####\\\\ .~~.:.             :
-                                \\\\':.:.:.:'#########.===. ~ |.'-.   . '''.. :
-                                 \\\\    .'  ########## \\\ \\\ _.' '. '-.       '''.
-                                  \\\\  :     ########   \\\ \\\      '.  '-.        :
-                                :  \\\\'    '   #### :    \\\ \\\      :.    '-.      :
-                                :  .\\\\   :'  :     :     \\\ \\\       :      '-.    :
-                              : .'  .\\\\\\  '  :      : :    \\\ \\\       :        ''.   :
-                              ::   :  \\\\\  :.      :    :   \\\ \\      :          ''. :
-                              ::. :    \\\\\  : :      :  ;    \\\ \\\     :           ''.:
-                                : ':    \\\\    :  :     :  :  \\\:\\\     :        ..''
-                                  :    ' \\\\    :      :    ;  \\\|      :   .'''
-                                  ''.   ' \\\\   :                         :.''
-                                    .:.....\\\\   : 
+                                                          ....
+                                                        .'' .'''
+                    .                                 .'   :
+                   \\\\                              .:    :
+                    \\\\                            _:    :       ..----.._
+                     \\\\                        .:::.....:::.. .'         '''.
+                      \\\\                     .'  #-. .-######'     #        '''.
+                       \\\\                     '.##'/ ' ################       :
+                        \\\\                      #####################         :
+                         \\\\                   ..##.-.#### .''''###'.._        :
+                          \\\\                 :--:########:            ''''.    .' :
+                           \\\\..__...--.. :--:#######.'   '''.         '''.     :
+                            :     :  : : ''':''-:''''::        .         '''  .'
+                            '''-'''..: :    '''    '''''''.      ''.        :
+                              \\\\  :: : :     '''      '''''''.     ''.      .:
+                               \\\\ ::  : :           '''' ..:       '''     '''.
+                                \\\\::   : :           ....'' ..:       '''     '''.
+                                 \\\\::  : :    .....####\\\\ .~~.:.             :
+                                  \\\\':.:.:.:'#########.===. ~ |.'-.   . '''.. :
+                                   \\\\    .'  ########## \\\ \\\ _.' '. '-.       '''.
+                                    \\\\  :     ########   \\\ \\\      '.  '-.        :
+                                  :  \\\\'    '   #### :    \\\ \\\      :.    '-.      :
+                                  :  .\\\\   :'  :     :     \\\ \\\       :      '-.    :
+                                : .'  .\\\\\\  '  :      : :    \\\ \\\       :        ''.   :
+                                ::   :  \\\\\  :.      :    :   \\\ \\      :          ''. :
+                                ::. :    \\\\\  : :      :  ;    \\\ \\\     :           ''.:
+                                  : ':    \\\\    :  :     :  :  \\\:\\\     :        ..''
+                                    :    ' \\\\    :      :    ;  \\\|      :   .'''
+                                    ''.   ' \\\\   :                         :.''
+                                      .:.....\\\\   : 
 
 Alice was beginning to get very tired of sitting by her sister on the bank, and of having nothing to do:
 once or twice she had peeped into the book her sister was reading, but it had no pictures or conversations in it,
@@ -126,7 +153,7 @@ Down, down, down. Would the fall never come to an end? “I wonder how many mile
 Alice had learnt several things of this sort in her lessons in the schoolroom, and though this was not a very good opportunity for showing off her knowledge, 
 as there was no one to listen to her, still it was good practice to say it over) “—yes, that’s about the right distance—but then I wonder what Latitude or Longitude 
 I’ve got to?” (Alice had no idea what Latitude was, or Longitude either, but thought they were nice grand words to say.)
-Presently she began again. “I wonder if I shall fall right through the earth! How funny it’ll seem to come out among the people that walk with their heads downward!
+ Presently she began again. “I wonder if I shall fall right through the earth! How funny it’ll seem to come out among the people that walk with their heads downward!
 The Antipathies, I think—” (she was rather glad there was no one listening, this time, as it didn’t sound at all the right word) “—but I shall have to ask them what 
 the name of the country is, you know. Please, Ma’am, is this New Zealand or Australia?” (and she tried to curtsey as she spoke—fancy curtseying as you’re falling 
 through the air! Do you think you could manage it?) “And what an ignorant little girl she’ll think me for asking! No, it’ll never do to ask: perhaps I shall see it written up somewhere.”
@@ -160,7 +187,7 @@ drink much from a bottle marked “poison,” it is almost certain to disagree w
 However, this bottle was not marked “poison,” so Alice ventured to taste it, and finding it very nice, (it had, in fact, a sort of mixed flavour of cherry-tart, 
 custard, pine-apple, roast turkey, toffee, and hot buttered toast,) she very soon finished it off.
 “What a curious feeling!” said Alice; “I must be shutting up like a telescope.”
-w only ten inches high, and her face brightened up at the thought that she was now the right size for going through the little door into that lovely garden.
+ w only ten inches high, and her face brightened up at the thought that she was now the right size for going through the little door into that lovely garden.
 First, however, she waited for a few minutes to see if she was going to shrink any further: she felt a little nervous about this; “for it might end, you know,” 
 said Alice to herself, “in my going out altogether, like a candle. I wonder what I should be like then?” And she tried to fancy what the flame of a candle is like 
 after the candle is blown out, for she could not remember ever having seen such a thing.
@@ -176,9 +203,9 @@ an creep under the door; so either way I’ll get into the garden, and I don’t
 She ate a little bit, and said anxiously to herself, “Which way? Which way?”, holding her hand on the top of her head to feel which way it was growing, and 
 she was quite surprised to find that she remained the same size: to be sure, this generally happens when one eats cake, but Alice had got so much into the way of expecting nothing but out-of-the-way things to happen, that it seemed quite dull and stupid for life to go on in the common way.
 So she set to work, and very soon finished off the cake.
-        
-        
-
+          
+          
+  
 
 
 
@@ -195,57 +222,40 @@ So she set to work, and very soon finished off the cake.
 
 `;
 
-  useEffect(() => {
-    const generateContent = () => {
-      const lines = INSTRUCTIONS.split("\n");
-      const bugLineIndex = 20;
-      const bugColumnIndex = 10;
+  const FLAG = '🐞';
 
-      if (lines[bugLineIndex]) {
-        lines[bugLineIndex] =
-          lines[bugLineIndex].slice(0, bugColumnIndex) +
-          FLAG +
-          lines[bugLineIndex].slice(bugColumnIndex);
-      }
+useEffect(() => {
+  const generateContent = () => {
+    const lines = INSTRUCTIONS.split('\n');
+    const bugLineIndex = 170; // Change this to the desired line index
+    const bugColumnIndex = 30; // Change this to the desired column index
 
-      return lines.join("\n");
-    };
+    lines[bugLineIndex] = lines[bugLineIndex].slice(0, bugColumnIndex) + FLAG + lines[bugLineIndex].slice(bugColumnIndex);
 
-    setContent(generateContent());
-  }, []);
+    return lines.join('\n');
+  };
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      const lines = content.split("\n");
-      let flagFound = false;
 
-      lines.forEach((line, index) => {
-        const column = line.indexOf(FLAG);
-        if (column !== -1) {
-          console.log(`Flag found at line ${index + 1}, column ${column + 1}`);
-          flagFound = true;
-        }
-      });
+      
 
-      if (!flagFound) {
-        console.log("Flag not found");
-        clearInterval(intervalId);
-        window.location.href = "/deleting1";
-      }
-    }, 1000);
+  setContent(generateContent());
+}, [deletedFlagCounter]);
 
-    return () => clearInterval(intervalId);
-  }, [content]);
+const handleEditorChange = (newContent) => {
+  if (!newContent.includes(FLAG)) {
+    setDeletedFlagCounter(prevCounter => prevCounter + 1);
+    setMovesCount(prevMoves => prevMoves + 1);
 
-  const handleEditorChange = (newContent) => {
-    const flagIndex = newContent.indexOf(FLAG);
-
-    if (flagIndex !== -1) {
-      setMovesCount((prevMoves) => Math.max(0, prevMoves - 1));
+    if (movesCount >= MAX_MOVES) {
+      window.location.href = '/chalange1'; 
     }
 
-    setContent(newContent);
-  };
+    if (deletedFlagCounter >= TOTAL_FLAGS) {
+      window.location.href = '/level2';
+    }
+  }
+  setContent(newContent);
+};
 
   const handleCursorPositionChange = (selection) => {
     const position = selection.getCursor();
@@ -253,31 +263,16 @@ So she set to work, and very soon finished off the cake.
   };
 
   useEffect(() => {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
     editorRef.current.editor.focus();
 
-    const handleKeyDown = () => {
-      setMovesCount((prevMoves) => Math.max(0, prevMoves - 1));
-      console.log(`Moves left: ${movesCount}`);
-
-      if (movesCount === 0) {
-        alert("Restarting game. You ran out of moves!");
-        setMovesCount(MAX_MOVES);
-        setContent(INSTRUCTIONS);
-        window.location.reload();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
     return () => {
-      document.body.style.overflow = "auto";
-      document.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = 'auto';
     };
-  }, [movesCount]);
+  }, []);
 
   return (
-    <div style={{ position: "relative", height: "100vh" }}>
+    <div style={{ position: 'relative', height: '100vh' }}>
       <AceEditor
         ref={editorRef}
         mode="text"
@@ -297,29 +292,15 @@ So she set to work, and very soon finished off the cake.
         onChange={handleEditorChange}
         onCursorChange={handleCursorPositionChange}
         style={{
-          backgroundColor: "#303030",
-          color: "#ffffff",
+          backgroundColor: '#303030',
+          color: '#ffffff',
         }}
       />
-      <div
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          zIndex: 999,
-          backgroundColor: "#000000",
-          color: "red",
-          borderTop: "1px solid #ccc",
-          padding: "5px",
-        }}
-      >
-        <span>
-          MOVES LEFT: {movesCount}/{MAX_MOVES}
-        </span>
+      <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', zIndex: 999, backgroundColor: '#000000', color: 'white', borderTop: '1px solid #ccc', padding: '5px' }}>
+        <span>Row: {cursorPosition.row + 1}, Column: {cursorPosition.column + 1}, Deleted bugs: {deletedFlagCounter}/{TOTAL_FLAGS}, MOVES LEFT: {movesCount}/{MAX_MOVES} chalange: 1/4 completed</span>
       </div>
     </div>
   );
 };
 
-export default Challenge1;
+export default Chalange3;

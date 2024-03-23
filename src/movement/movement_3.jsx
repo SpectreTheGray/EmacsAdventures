@@ -209,7 +209,7 @@ useEffect(() => {
     if (!newContent.includes(FLAG)) {
       setDeletedFlagCounter(prevCounter => prevCounter + 1);
       if (deletedFlagCounter >= TOTAL_FLAGS) {
-        window.location.href = '/deleting1';
+        window.location.href = '/chalange1';
       }
     }
     setContent(newContent);
