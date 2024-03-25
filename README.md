@@ -2,50 +2,45 @@
 
 Welcome to Emacs Adventures! This is a text-based adventure game with a React frontend powered by Tauri, bringing you the joy of adventure gaming directly to your desktop. This README will guide you through setting up the environment to develop and play this exciting game.
 
-## Prerequisites
+## Getting started
 
-Before you get started, make sure you have the following installed on your system:
+1. To install the game:
+```bash
+npm install -g emacsadventures
+```
+2. to start the game:
+```bash
+emacsadventures
+```
 
-- [Node.js](https://nodejs.org/) (v14 or higher)
-- [npm](https://www.npmjs.com/) (Node Package Manager)
-- [Tauri CLI](https://tauri.studio/docs/getting-started/intro) - Install Tauri globally by running `npm install -g tauri`
+## Development
 
-## Getting Started
-
-To set up the development environment and play Emacs Adventures, follow these steps:
+If you want to contribute to the development of Emacs Adventures or customize it to your liking, follow
+these steps:
 
 1. Clone the repository:
-
+ 
+```bash
 git clone https://github.com/your-username/emacs-adventures.git
 cd emacs-adventures
+```
 
 2. Install dependencies:
-
+   
+```bash
 npm install
+```
+3. Start the development server:
 
-3. Install the Emacs Adventures CLI globally:
-
-npm install -g emacsadventures
-
-## Playing the Game
-
-To play the game, follow these steps:
-
-1. Run the development server:
-
+```bash
 npm run tauri dev
+```
 
 This command will start the Tauri development server and open the game in a desktop window.
 
-2. Enjoy playing Emacs Adventures in your desktop application!
-
 ## Contributing
 
-We welcome contributions to Emacs Adventures! If you'd like to contribute, please fork the repository, make your changes, and submit a pull request. Be sure to follow our [contribution guidelines](CONTRIBUTING.md).
-
-## Issues
-
-If you encounter any bugs or have suggestions for improvements, please open an issue on the [issue tracker](https://github.com/your-username/emacs-adventures/issues).
+We welcome contributions to Emacs Adventures! If you'd like to contribute, please fork the repository, make your changes, and submit a pull request. 
 
 ## License
 
