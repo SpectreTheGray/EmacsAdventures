@@ -1,5 +1,3 @@
-
-Copy code
 # Emacs Adventures - Tauri App
 
 Welcome to Emacs Adventures! This is a text-based adventure game with a React frontend powered by Tauri, bringing you the joy of adventure gaming directly to your desktop. This README will guide you through setting up the environment to develop and play this exciting game.
